@@ -1,0 +1,28 @@
+# Per trasferire i files
+git push origin master
+
+# Per aggiungere i nuovi files, sotto dir comprese, altrimenti .
+git add --all :/
+
+# Per fare il commit del lavoro svolto
+git commit -a -m "Cosa si è fatto"
+
+# Per trasferire i files 
+git push --tags
+
+# Mostra i tags
+git describe
+
+# Inserire un tag -a=annotated nome_tag -m=messaggio
+git tag -a v1.4 -m 'qualcosa sul tag'
+
+# Per aggiornare dal repository remoto a quello locale
+git pull (prima fare il commit)
+
+
+# Per aggiungere un repository remoto
+git remote add origin <server>
+
+cd /path/to/my/repo
+git remote add origin https://gianc@bitbucket.org/gianc/corpuspitturafiorentina.git
+git push -u origin --all   # to push up the repo for the first time
