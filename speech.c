@@ -50,7 +50,8 @@ void speech_value(char *text_to_speech)
 	n_byte_write = write(socket,buffer,strlen(buffer));
 	if (n_byte_write < 0) puts("I can't send cmd to festival");
 	//--
-	sprintf(buffer,"(SayText \"%s\")",text_to_speech);
+	sprintf(buffer,"(SayText \"%s gradi\")",text_to_speech);
+	puts(buffer);
 	n_byte_write = write(socket,buffer,strlen(buffer));
 	if (n_byte_write < 0)  if (n_byte_write < 0) puts("I can't send message to speak");
 }
