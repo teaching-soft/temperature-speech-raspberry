@@ -1,9 +1,9 @@
 /***************************************************************************
-                          rs232.c for "la bussola parlante"
-                             -------------------
-    begin                : mer apr 21 10:34:57 CET 2011
-    copyright            : (C) 2011 by Giancarlo Martini and friends
-    email                : gm@giancarlomartini.it
+	progetto			: "Raspberry speech" con scheda snowboard
+    file:				: rs232.c
+    begin               : mer apr 21 10:34:57 CET 2011
+    copyright           : (C) 2011 by Giancarlo Martini
+    email               : gm@giancarlomartini.it
  ***************************************************************************/
 
 /***************************************************************************
@@ -29,7 +29,7 @@
 #include <string.h>
 #include <errno.h>
 #include "rs232.h"
- 
+
 
 int _rs232_set(int ttys_descriptor,unsigned int baud,unsigned int data_bits, unsigned int parity, unsigned int stop_bits);
 /* For error handling */
@@ -42,8 +42,7 @@ int _setrs232_other_c_o_flags(int ttys_descriptor);
 int _setrs232_other_c_c_flags(int ttys_descriptor);
 int _setrs232_other_c_l_flags(int ttys_descriptor);
 /*--------------------------------------------------------------------------------------------- */
-int rs232_open(const char *ttysPort,unsigned int baud, unsigned int data_bits, unsigned int parity, unsigned int stop_bits)
-{
+int rs232_open(const char *ttysPort,unsigned int baud, unsigned int data_bits, unsigned int parity, unsigned int stop_bits) {
 	int ret;
 	/* Apre la porta .... */
 	int ttys_descriptor = open(ttysPort, O_RDWR | O_NOCTTY | O_NONBLOCK | O_NDELAY);
@@ -60,68 +59,59 @@ int rs232_open(const char *ttysPort,unsigned int baud, unsigned int data_bits, u
 	return ttys_descriptor;
 }
 /*---------------------------------------------------------------------------------------------*/
-int _rs232_set(int ttys_descriptor, unsigned int baud, unsigned int data_bits, unsigned int parity, unsigned int stop_bits)
-{
+int _rs232_set(int ttys_descriptor, unsigned int baud, unsigned int data_bits, unsigned int parity, unsigned int stop_bits) {
 	/* Altrimenti provare con void cfmakeraw(struct termios *termios_p);*/
 	int ret;
 	ret = _setrs232_baud(ttys_descriptor,baud);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Set baud");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
 	}
 	ret = _setrs232_databits(ttys_descriptor,data_bits);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Databits!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
 	}
 
 	ret =_setrs232_parity(ttys_descriptor,parity);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Parity!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
 	}
 
 	ret =_setrs232_stopbits(ttys_descriptor,stop_bits);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Stopbits!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
 	}
 
 	ret = _setrs232_other_c_i_flags(ttys_descriptor);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Other c_i flags!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
 	}
 
 	ret = _setrs232_other_c_o_flags(ttys_descriptor);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Other c_o flags!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
 	}
 
 	ret = _setrs232_other_c_c_flags(ttys_descriptor);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Other c_c flags!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
 	}
 
 	ret = _setrs232_other_c_l_flags(ttys_descriptor);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Other c_l flags!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
@@ -130,14 +120,12 @@ int _rs232_set(int ttys_descriptor, unsigned int baud, unsigned int data_bits, u
 	return ret;
 }
 /*--------------------------------------------------------------------------------------------- */
-int _setrs232_baud(int ttys_descriptor,unsigned int baud)
-{
+int _setrs232_baud(int ttys_descriptor,unsigned int baud) {
 	int ret;
 	struct termios options;
 	/* Recupera le informazioni        */
 	ret = tcgetattr(ttys_descriptor, &options);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Tcgetattr!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
@@ -145,16 +133,14 @@ int _setrs232_baud(int ttys_descriptor,unsigned int baud)
 
 	/*  Imposta la velocità in input     */
 	ret = cfsetispeed(&options,baud);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Cfsetispeed!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
 	}
 	/* ed in output */
 	ret = cfsetospeed(&options,baud);
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("Cfsetospeed!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
@@ -162,8 +148,7 @@ int _setrs232_baud(int ttys_descriptor,unsigned int baud)
 	// Applica i cambiamenti immediatamente
 	ret = tcsetattr(ttys_descriptor, TCSANOW, &options);
 
-	if(ret == -1)
-	{
+	if(ret == -1) {
 		perror("-------!");
 		printf("ERRNO=%d\n",errno);
 		exit(1);
@@ -172,8 +157,7 @@ int _setrs232_baud(int ttys_descriptor,unsigned int baud)
 	return ret;
 }
 /*--------------------------------------------------------------------------------------------- */
-int _setrs232_databits(int ttys_descriptor,unsigned int data_bits)
-{
+int _setrs232_databits(int ttys_descriptor,unsigned int data_bits) {
 	int ret;
 	struct termios options;
 	/* Recupera le informazioni        */
@@ -186,8 +170,7 @@ int _setrs232_databits(int ttys_descriptor,unsigned int data_bits)
 	return ret;
 }
 /*--------------------------------------------------------------------------------------------- */
-int _setrs232_parity(int ttys_descriptor,unsigned int parity)
-{
+int _setrs232_parity(int ttys_descriptor,unsigned int parity) {
 	int ret;
 	struct termios options;
 	/* Recupera le informazioni        */
@@ -196,14 +179,12 @@ int _setrs232_parity(int ttys_descriptor,unsigned int parity)
 	/* Nessuna parità                  */
 	if(parity == PNONE) options.c_cflag &= ~PARENB;
 	/* Parità pari                     */
-	if(parity == PEVEN)
-	{
+	if(parity == PEVEN) {
 		options.c_cflag |= PARENB;
 		options.c_cflag &= ~PARODD;
 	}
 	/* Parità dispari                  */
-	if(parity == PODD)
-	{
+	if(parity == PODD) {
 		options.c_cflag |= PARENB;
 		options.c_cflag |= PARODD;
 	}
@@ -216,8 +197,7 @@ int _setrs232_parity(int ttys_descriptor,unsigned int parity)
 	return ret;
 }
 /*--------------------------------------------------------------------------------------------- */
-int _setrs232_stopbits(int ttys_descriptor,unsigned int stop_bits)
-{
+int _setrs232_stopbits(int ttys_descriptor,unsigned int stop_bits) {
 	int ret;
 	struct termios options;
 	/* Recupera le informazioni        */
@@ -233,8 +213,7 @@ int _setrs232_stopbits(int ttys_descriptor,unsigned int stop_bits)
 
 }
 /*--------------------------------------------------------------------------------------------- */
-int _setrs232_other_c_i_flags(int ttys_descriptor)
-{
+int _setrs232_other_c_i_flags(int ttys_descriptor) {
 	int ret;
 	struct termios options;
 	/* Recupera le informazioni        */
@@ -252,8 +231,7 @@ int _setrs232_other_c_i_flags(int ttys_descriptor)
 	return ret;
 }
 /*--------------------------------------------------------------------------------------------- */
-int _setrs232_other_c_o_flags(int ttys_descriptor)
-{
+int _setrs232_other_c_o_flags(int ttys_descriptor) {
 	int ret;
 	struct termios options;
 	/* Recupera le informazioni        */
@@ -261,20 +239,19 @@ int _setrs232_other_c_o_flags(int ttys_descriptor)
 
 	/* Impedisce il cambio fra CR e NL in output e viceversa */
 	options.c_iflag &= ~(ONLCR | OCRNL);
-	
+
 	/* Disabilita user-defined outprocessing in uscita */
 	options.c_oflag &= ~OPOST;
-	
+
 	/* Abilita l'invio del CR */
 	options.c_oflag &= ~ONLRET;
-	
+
 	/* Setta  le opzioni della porta */
 	ret = tcsetattr(ttys_descriptor, TCSANOW, &options);
 	return ret;
 }
 /*--------------------------------------------------------------------------------------------- */
-int _setrs232_other_c_c_flags(int ttys_descriptor)
-{
+int _setrs232_other_c_c_flags(int ttys_descriptor) {
 	int ret;
 	struct termios options;
 	/* Recupera le informazioni        */
@@ -282,7 +259,7 @@ int _setrs232_other_c_c_flags(int ttys_descriptor)
 
 	/* Abilita il ricevitore       */
 	options.c_cflag |= CREAD;
-	
+
 	/* Ignora le linee di controllo del modem     */
 	options.c_cflag |= CLOCAL;
 	/* Disabilita il controllo RTS/CTS */
@@ -292,8 +269,7 @@ int _setrs232_other_c_c_flags(int ttys_descriptor)
 	return ret;
 }
 /*--------------------------------------------------------------------------------------------- */
-int _setrs232_other_c_l_flags(int ttys_descriptor)
-{
+int _setrs232_other_c_l_flags(int ttys_descriptor) {
 	int ret;
 	struct termios options;
 	/* Recupera le informazioni        */
@@ -303,7 +279,7 @@ int _setrs232_other_c_l_flags(int ttys_descriptor)
 	options.c_lflag &= ~ISIG;
 	/* Disabilita la modalità 'canonica' */
 	options.c_lflag &= ~ICANON;
-	
+
 	/* Modalità disabilita l'eco, carattere, linea e parola */
 	options.c_lflag &= ~(ECHO | ECHOE | ECHOK);
 
@@ -316,17 +292,15 @@ int _setrs232_other_c_l_flags(int ttys_descriptor)
 
 
 
-int rs232_buffer_in_lenght(int ttys_descriptor)
-{
+int rs232_buffer_in_lenght(int ttys_descriptor) {
 	int ret;
-    int nbytes;
-    ret = ioctl(ttys_descriptor,FIONREAD,&nbytes);
+	int nbytes;
+	ret = ioctl(ttys_descriptor,FIONREAD,&nbytes);
 	if(ret == -1) return -1;
-    return nbytes;
+	return nbytes;
 }
 /*--------------------------------------------------------------------------------------------- */
-int rs232_bytes_arrived(int ttys_descriptor, int time_out)
-{
+int rs232_bytes_arrived(int ttys_descriptor, int time_out) {
 	int ret;
 	fd_set readfs;
 	struct timeval tv;
@@ -339,8 +313,7 @@ int rs232_bytes_arrived(int ttys_descriptor, int time_out)
 
 	select(ttys_descriptor + 1, &readfs, NULL, NULL,&tv);
 
-	if (FD_ISSET(ttys_descriptor,&readfs))
-	{
+	if (FD_ISSET(ttys_descriptor,&readfs)) {
 		int nbytes;
 		ret = ioctl(ttys_descriptor,FIONREAD,&nbytes);
 		if(ret == -1) return -1;
@@ -349,8 +322,7 @@ int rs232_bytes_arrived(int ttys_descriptor, int time_out)
 	return 0;
 }
 /*---------------------------------------------------------------------------------------------*/
-int rs232_read(int ttys_descriptor, unsigned char *buffer, unsigned int max_bytes)
-{
+int rs232_read(int ttys_descriptor, unsigned char *buffer, unsigned int max_bytes) {
 	int bytes_readed, bytes_aval, ret;
 
 	if(ttys_descriptor == -1) return -1;
@@ -358,8 +330,7 @@ int rs232_read(int ttys_descriptor, unsigned char *buffer, unsigned int max_byte
 	/* Controlla quanti bytes sono arrivati nel caso ritorna subito  */
 	bytes_aval = rs232_bytes_arrived(ttys_descriptor,0);
 
-	if(bytes_aval == 0)
-	{
+	if(bytes_aval == 0) {
 		buffer [0] = '\0';
 		return 0;
 	}
@@ -372,18 +343,15 @@ int rs232_read(int ttys_descriptor, unsigned char *buffer, unsigned int max_byte
 	return ret;
 }
 /*---------------------------------------------------------------------------------------------*/
-void rs232_close(int ttys_descriptor)
-{
+void rs232_close(int ttys_descriptor) {
 	/* Sblocco del file     */
-	if(ttys_descriptor != -1)
-	{
+	if(ttys_descriptor != -1) {
 		flock(ttys_descriptor,LOCK_UN);
 		close(ttys_descriptor);
 	}
 }
 /*---------------------------------------------------------------------------------------------*/
-int rs232_write(int ttys_descriptor, unsigned char * buffer, unsigned int buf_len)
-{
+int rs232_write(int ttys_descriptor, unsigned char * buffer, unsigned int buf_len) {
 	int ret;
 	if(ttys_descriptor == -1) return -1;
 

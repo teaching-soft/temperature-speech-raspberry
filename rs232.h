@@ -1,9 +1,9 @@
 /***************************************************************************
-                          rs232.h for "la bussola parlante"
-                             -------------------
-    begin                : mer apr 21 10:34:57 CET 2011
-    copyright            : (C) 2011 by Giancarlo Martini and friends
-    email                : gm@giancarlomartini.it
+	progetto			: "Raspberry speech" con scheda snowboard
+    file:				: rs232.h
+    begin               : mer apr 21 10:34:57 CET 2011
+    copyright           : (C) 2011 by Giancarlo Martini
+    email               : gm@giancarlomartini.it
  ***************************************************************************/
 
 /***************************************************************************
@@ -14,7 +14,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
+
 
 #ifndef _RS232_H_
 #define _RS232_H_
@@ -63,8 +63,8 @@ int rs232_read(int ttys_descriptor,unsigned char *buffer, unsigned int max_bytes
  * di bytes scritti o -1 se fallisce.                                      *
  * ************************************************************************/
 int rs232_write(int ttys_descriptor, unsigned char * buffer, unsigned int buf_len);
-	
+
 /* Chiude il file descriptor                                               */
 void rs232_close(int ttys_descriptor);
 
-#endif 
+#endif
