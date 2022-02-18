@@ -1,5 +1,5 @@
 /***************************************************************************
-	progetto			: "Raspberry speech" con scheda snowboard
+	progetto			: "Raspberry speech" 
     file:				: rs232.h
     begin               : mer apr 21 10:34:57 CET 2011
     copyright           : (C) 2011 by Giancarlo Martini
